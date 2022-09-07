@@ -21,6 +21,7 @@ module.exports = {
   rules: {
     semi: ['error', 'never'],
     'react/jsx-filename-extension': 'off',
+    'react/button-has-type': 'off',
     'import/no-extraneous-dependencies': 'off',
     'react/react-in-jsx-scope': 'off',
     'react/function-component-definition': 'off',

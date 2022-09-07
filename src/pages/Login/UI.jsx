@@ -1,7 +1,13 @@
-import { func } from 'prop-types'
+import { func, string } from 'prop-types'
+import Input from '../../components/Input'
 import Layout from '../../components/Layout'
+import Button from '../../components/Button'
 
-const LoginUI = ({ setState, logIn }) => {
+const LoginUI = ({
+  username, password, setState, logIn,
+}) => {
+  const canLogIn = Boolean(username) && Boolean(password)
+
   return (
     <Layout>
       <form
@@ -10,33 +16,34 @@ const LoginUI = ({ setState, logIn }) => {
           logIn()
         }}
       >
-        <label htmlFor="username">
-          Username
-
-          <input
-            id="username"
+        <div className="w-full flex flex-col gap-5 py-5">
+          <Input
+            label="Username"
             type="text"
             onChange={(e) => setState({ username: e.target.value })}
           />
-        </label>
 
-        <label htmlFor="username">
-          Password
-
-          <input
-            id="username"
+          <Input
+            label="Password"
             type="password"
             onChange={(e) => setState({ password: e.target.value })}
           />
-        </label>
 
-        <button type="submit">Log In</button>
+          <Button
+            type="submit"
+            disabled={!canLogIn}
+          >
+            Log In
+          </Button>
+        </div>
       </form>
     </Layout>
   )
 }
 
 LoginUI.propTypes = {
+  username: string.isRequired,
+  password: string.isRequired,
   setState: func.isRequired,
   logIn: func.isRequired,
 }
