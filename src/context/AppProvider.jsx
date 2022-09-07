@@ -6,7 +6,7 @@ export const appContext = React.createContext()
 
 const AppProvider = ({ children }) => {
   const [appState, setAppState] = useFlow({
-    isLoadingApp: true,
+    isLoading: true,
     isAuthenticated: false,
   })
 

@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -14,28 +13,32 @@ const App = () => {
     appState,
   } = useContext(appContext)
 
+  if (appState.isLoading) {
+    return null
+  }
+
   return (
-    <Router>
+    <Routes>
       {appState.isAuthenticated && (
-        <Routes>
+        <>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route
             path="*"
             element={<Navigate to="/dashboard" replace />}
           />
-        </Routes>
+        </>
       )}
 
       {!appState.isAuthenticated && (
-        <Routes>
+        <>
           <Route path="/login" element={<Login />} />
           <Route
             path="*"
             element={<Navigate to="/login" replace />}
           />
-        </Routes>
+        </>
       )}
-    </Router>
+    </Routes>
   )
 }
 

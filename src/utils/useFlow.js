@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import produce from 'immer'
 
 export const useFlow = (state, actions = null, context = {}) => {
@@ -35,20 +35,6 @@ export const useFlow = (state, actions = null, context = {}) => {
   } else {
     flowActions = setState
   }
-
-  useEffect(() => {
-    if (flowActions === null) {
-      return
-    }
-
-    if (typeof flowActions.init === 'function') {
-      flowActions.init()
-    }
-
-    if (typeof flowActions.destroy === 'function') {
-      return flowActions.destroy
-    }
-  }, [])
 
   return [
     flowState,

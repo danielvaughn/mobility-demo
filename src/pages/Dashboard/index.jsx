@@ -1,9 +1,3 @@
-const Dashboard = () => {
-  return (
-    <div>
-      i am the dashboard
-    </div>
-  )
-}
+import DashboardClient from './Client'
 
-export default Dashboard
+export default DashboardClient

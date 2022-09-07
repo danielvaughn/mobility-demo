@@ -6,8 +6,6 @@ const getApiUrl = (path) => {
 
   const url = `${protocol}://${domain}${port}/${urlPath}`
 
-  console.log(url)
-
   return new URL(url)
 }
 
