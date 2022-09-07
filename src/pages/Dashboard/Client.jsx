@@ -8,6 +8,7 @@ const DashboardClient = () => {
   const [state, actions] = useFlow(
     {
       isLoading: true,
+      showOnlyMine: false,
       draftType: 'blue',
       draftFoo: 0,
       draftBar: 0,

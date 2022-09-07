@@ -6,7 +6,17 @@ import Loader from '../../components/Loader'
 import './Dashboard.css'
 
 const DashboardUI = ({
-  draftType, draftFoo, draftBar, draftBaz, isLoading, calculations, createCalculation, cancelCalculation, logOut, setState,
+  draftType,
+  draftFoo,
+  draftBar,
+  draftBaz,
+  showOnlyMine,
+  isLoading,
+  calculations,
+  createCalculation,
+  cancelCalculation,
+  logOut,
+  setState,
 }) => {
   return (
     <section className="text-slate-900 h-full flex flex-col">
@@ -27,13 +37,13 @@ const DashboardUI = ({
 
         {!isLoading && (
           <div className="max-w-4xl mx-auto px-5">
-            <h2 className="text-xl font-semibold mb-3">Start A New Calculation</h2>
+            <h2 className="text-xl font-semibold mb-4">Start A New Calculation</h2>
             <form
               onSubmit={(e) => {
                 e.preventDefault()
                 createCalculation()
               }}
-              className="p-3 bg-white rounded mb-5 flex space-x-5"
+              className="p-3 bg-white rounded mb-8 flex space-x-5"
             >
               <label htmlFor="calc-type">
                 <span className="block mb-1 text-sm">Type</span>
@@ -109,7 +119,23 @@ const DashboardUI = ({
               </div>
             </form>
 
-            <h2 className="text-xl font-semibold mb-3">Calculations</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">Calculations</h2>
+
+              <label htmlFor="show-only-mine">
+                <span className="text-sm mr-2">My Calculations</span>
+                <input
+                  id="show-only-mine"
+                  type="checkbox"
+                  checked={showOnlyMine}
+                  onChange={(e) => {
+                    setState({
+                      showOnlyMine: e.target.checked,
+                    })
+                  }}
+                />
+              </label>
+            </div>
             <table className="text-left w-full">
               <thead>
                 <tr>
@@ -121,6 +147,10 @@ const DashboardUI = ({
               </thead>
               <tbody>
                 {calculations.map((calc) => {
+                  if (showOnlyMine && !calc.mine) {
+                    return null
+                  }
+
                   return (
                     <tr
                       key={calc.id}
@@ -189,6 +219,7 @@ DashboardUI.propTypes = {
   draftFoo: number.isRequired,
   draftBar: number.isRequired,
   draftBaz: number.isRequired,
+  showOnlyMine: bool.isRequired,
   calculations: arrayOf(shape({
     id: string,
     status: oneOf(['started', 'completed', 'cancelled']),
