@@ -148,7 +148,7 @@ const DashboardUI = ({
                     toggleHidden()
                   }}
                 >
-                  Show Hidden
+                  Show Hidden Rows
                   <AiOutlineEye className="ml-1" />
                 </Button>
               </div>
