@@ -115,7 +115,7 @@ const DashboardUI = ({
                 <tr>
                   <th className="pb-2">ID</th>
                   <th className="pb-2">Owner</th>
-                  <th className="pb-2">Progress</th>
+                  <th className="pb-2">Status</th>
                   <th className="pb-2 text-right">Actions</th>
                 </tr>
               </thead>
@@ -146,25 +146,30 @@ const DashboardUI = ({
                         )}
                       </td>
                       <td className="pb-2">
-                        <progress
-                          value={calc.fraction_complete}
-                          max={1}
-                          className="progress-bar"
-                        />
+                        <div className="flex items-center max-w-[175px]">
+                          <span className="flex-grow capitalize text-sm text-slate-600">{calc.status}</span>
+                          <progress
+                            value={calc.fraction_complete}
+                            max={1}
+                            className={`progress-bar ${calc.status}`}
+                          />
+                        </div>
                       </td>
                       <td className="pb-2">
-                        {calc.mine && (
-                        <Button
-                          type="button"
-                          size="small"
-                          bgColor="bg-red-500"
-                          onClick={() => {
-                            cancelCalculation(calc.id)
-                          }}
-                        >
-                          Cancel
-                        </Button>
-                        )}
+                        <div className="flex items-center justify-end">
+                          {calc.mine && (
+                          <Button
+                            type="button"
+                            size="small"
+                            bgColor="bg-red-500"
+                            onClick={() => {
+                              cancelCalculation(calc.id)
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   )
@@ -186,13 +191,13 @@ DashboardUI.propTypes = {
   draftBaz: number.isRequired,
   calculations: arrayOf(shape({
     id: string,
+    status: oneOf(['started', 'completed', 'cancelled']),
     bar: number,
     baz: number,
     calc_type: string,
     started_at: string,
     cancelled_at: string,
     completed_at: string,
-    is_complete: bool,
     error: object,
     foo: number,
     fraction_complete: number,

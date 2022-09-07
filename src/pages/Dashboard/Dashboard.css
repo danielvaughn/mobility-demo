@@ -1,6 +1,6 @@
 
 .progress-bar {
-  @apply rounded-sm overflow-hidden block;
+  @apply rounded-sm overflow-hidden block w-20;
 }
 
 .progress-bar[value]::-webkit-progress-bar {
@@ -8,5 +8,17 @@
 }
 
 .progress-bar[value]::-webkit-progress-value {
-  @apply bg-lime-400;
+  @apply bg-lime-300;
+}
+
+.progress-bar.cancelled[value]::-webkit-progress-bar {
+  @apply bg-slate-300;
+}
+
+.progress-bar.cancelled[value]::-webkit-progress-value {
+  @apply bg-slate-300;
+}
+
+.progress-bar.completed[value]::-webkit-progress-value {
+  @apply bg-lime-500;
 }

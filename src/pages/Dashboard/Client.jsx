@@ -44,9 +44,16 @@ export const dashboardActions = ({
     setState({
       isLoading: false,
       calculations: calculations.map((calc) => {
+        let status = 'started'
+        if (calc.cancalled_at) {
+          status = 'cancelled'
+        } else if (calc.completed_at) {
+          status = 'completed'
+        }
+
         return {
           ...calc,
-          is_complete: calc.completed_at !== '',
+          status,
         }
       }),
     })
