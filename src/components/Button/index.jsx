@@ -13,7 +13,7 @@ const Button = ({
       {...props}
       type={type}
       className={classNames(
-        'text-white rounded max-w-xs disabled:opacity-50 transition block',
+        'text-white rounded max-w-xs disabled:opacity-50 transition flex items-center',
         bgColor,
         {
           'py-1 px-3 text-xs': size === 'small',

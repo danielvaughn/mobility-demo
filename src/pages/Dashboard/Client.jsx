@@ -14,6 +14,7 @@ const DashboardClient = () => {
       draftBar: 0,
       draftBaz: 0,
       calculations: [],
+      hiddenMap: {},
     },
     dashboardActions,
     useContext(appContext),
@@ -82,6 +83,27 @@ export const dashboardActions = ({
   },
   cancelCalculation: async (id) => {
     await PATCH(`calculations/${id}/cancel`)
+  },
+  toggleHidden: (id) => {
+    console.log(`th ${id}`)
+    const { hiddenMap } = getState()
+
+    if (!id) {
+      setState({
+        hiddenMap: {},
+      })
+      return
+    }
+
+    const newHiddenMap = {
+      ...hiddenMap,
+    }
+
+    newHiddenMap[id] = true
+
+    setState({
+      hiddenMap: newHiddenMap,
+    })
   },
   logOut: () => {
     const { setAppState } = getContext()

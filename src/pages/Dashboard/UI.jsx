@@ -1,6 +1,8 @@
 import {
-  arrayOf, bool, func, number, object, oneOf, shape, string,
+  any,
+  arrayOf, bool, func, number, object, objectOf, oneOf, shape, string,
 } from 'prop-types'
+import { AiOutlineClose, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import Button from '../../components/Button'
 import Loader from '../../components/Loader'
 import './Dashboard.css'
@@ -11,10 +13,12 @@ const DashboardUI = ({
   draftBar,
   draftBaz,
   showOnlyMine,
+  hiddenMap,
   isLoading,
   calculations,
   createCalculation,
   cancelCalculation,
+  toggleHidden,
   logOut,
   setState,
 }) => {
@@ -122,19 +126,32 @@ const DashboardUI = ({
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Calculations</h2>
 
-              <label htmlFor="show-only-mine">
-                <span className="text-sm mr-2">My Calculations</span>
-                <input
-                  id="show-only-mine"
-                  type="checkbox"
-                  checked={showOnlyMine}
-                  onChange={(e) => {
-                    setState({
-                      showOnlyMine: e.target.checked,
-                    })
+              <div className="flex items-center">
+                <label htmlFor="show-only-mine" className="mr-5">
+                  <span className="text-sm mr-2">My Calculations</span>
+                  <input
+                    id="show-only-mine"
+                    type="checkbox"
+                    checked={showOnlyMine}
+                    onChange={(e) => {
+                      setState({
+                        showOnlyMine: e.target.checked,
+                      })
+                    }}
+                  />
+                </label>
+                <Button
+                  type="button"
+                  size="small"
+                  disabled={Object.keys(hiddenMap).length === 0}
+                  onClick={() => {
+                    toggleHidden()
                   }}
-                />
-              </label>
+                >
+                  Show Hidden
+                  <AiOutlineEye className="ml-1" />
+                </Button>
+              </div>
             </div>
             <table className="text-left w-full">
               <thead>
@@ -147,7 +164,9 @@ const DashboardUI = ({
               </thead>
               <tbody>
                 {calculations.map((calc) => {
-                  if (showOnlyMine && !calc.mine) {
+                  const isFiltered = showOnlyMine && !calc.mine
+                  const isHidden = hiddenMap[calc.id] === true
+                  if (isFiltered || isHidden) {
                     return null
                   }
 
@@ -186,7 +205,7 @@ const DashboardUI = ({
                         </div>
                       </td>
                       <td className="pb-2">
-                        <div className="flex items-center justify-end">
+                        <div className="flex items-center justify-end space-x-2">
                           {calc.mine && (
                           <Button
                             type="button"
@@ -195,10 +214,23 @@ const DashboardUI = ({
                             onClick={() => {
                               cancelCalculation(calc.id)
                             }}
+                            title="Cancel"
                           >
-                            Cancel
+                            <AiOutlineClose />
                           </Button>
                           )}
+
+                          <Button
+                            type="button"
+                            size="small"
+                            bgColor="bg-gray-500"
+                            onClick={() => {
+                              toggleHidden(calc.id)
+                            }}
+                            title="Hide"
+                          >
+                            <AiOutlineEyeInvisible />
+                          </Button>
                         </div>
                       </td>
                     </tr>
@@ -220,6 +252,7 @@ DashboardUI.propTypes = {
   draftBar: number.isRequired,
   draftBaz: number.isRequired,
   showOnlyMine: bool.isRequired,
+  hiddenMap: objectOf(any).isRequired,
   calculations: arrayOf(shape({
     id: string,
     status: oneOf(['started', 'completed', 'cancelled']),
@@ -240,6 +273,7 @@ DashboardUI.propTypes = {
   setState: func.isRequired,
   createCalculation: func.isRequired,
   cancelCalculation: func.isRequired,
+  toggleHidden: func.isRequired,
   logOut: func.isRequired,
 }
 
