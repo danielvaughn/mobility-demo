@@ -7,6 +7,7 @@ import {
 import { appContext } from '../../context/AppProvider'
 import Dashboard from '../Dashboard'
 import Login from '../Login'
+import CalculationDetail from '../CalculationDetail'
 
 const App = () => {
   const {
@@ -21,7 +22,9 @@ const App = () => {
     <Routes>
       {appState.isAuthenticated && (
         <>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route path=":calculationId" element={<CalculationDetail />} />
+          </Route>
           <Route
             path="*"
             element={<Navigate to="/dashboard" replace />}

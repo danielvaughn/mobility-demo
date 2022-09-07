@@ -1,10 +1,13 @@
 import { useContext, useEffect } from 'react'
+import { useNavigate } from 'react-router'
 import { useFlow } from '../../utils/useFlow'
 import { GET, PATCH, POST } from '../../utils/api'
 import { appContext } from '../../context/AppProvider'
 import DashboardUI from './UI'
 
 const DashboardClient = () => {
+  const navigate = useNavigate()
+
   const [state, actions] = useFlow(
     {
       isLoading: true,
@@ -18,7 +21,10 @@ const DashboardClient = () => {
       hiddenMap: {},
     },
     dashboardActions,
-    useContext(appContext),
+    {
+      ...useContext(appContext),
+      navigate,
+    },
   )
 
   useEffect(() => {
@@ -100,6 +106,11 @@ export const dashboardActions = ({
     setState({
       hiddenMap: newHiddenMap,
     })
+  },
+  viewCalculationDetails: (id) => {
+    const { navigate } = getContext()
+
+    navigate(`/dashboard/${id}`)
   },
   logOut: () => {
     const { setAppState } = getContext()

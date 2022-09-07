@@ -3,9 +3,9 @@ import {
   arrayOf, bool, func, number, object, objectOf, oneOf, shape, string,
 } from 'prop-types'
 import { AiOutlineClose, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
+import { Outlet } from 'react-router'
 import Button from '../../components/Button'
 import Loader from '../../components/Loader'
-import CalculationDetail from '../CalculationDetail'
 import './Dashboard.css'
 
 const DashboardUI = ({
@@ -13,11 +13,11 @@ const DashboardUI = ({
   draftFoo,
   draftBar,
   draftBaz,
-  detailId,
   showOnlyMine,
   hiddenMap,
   isLoading,
   calculations,
+  viewCalculationDetails,
   createCalculation,
   cancelCalculation,
   toggleHidden,
@@ -182,9 +182,7 @@ const DashboardUI = ({
                           type="button"
                           className="flex items-center whitespace-nowrap text-ellipsis overflow-hidden"
                           onClick={() => {
-                            setState({
-                              detailId: calc.id,
-                            })
+                            viewCalculationDetails(calc.id)
                           }}
                         >
                           <span
@@ -253,23 +251,13 @@ const DashboardUI = ({
           )}
         </div>
       </section>
-      {Boolean(detailId) && (
-      <CalculationDetail
-        id={detailId}
-        onClose={() => {
-          setState({
-            detailId: '',
-          })
-        }}
-      />
-      )}
+      <Outlet />
     </>
   )
 }
 
 DashboardUI.propTypes = {
   isLoading: bool.isRequired,
-  detailId: string.isRequired,
   draftType: oneOf(['blue', 'green', 'yellow', 'purple']).isRequired,
   draftFoo: number.isRequired,
   draftBar: number.isRequired,
@@ -294,6 +282,7 @@ DashboardUI.propTypes = {
     values_per_second: number,
   })).isRequired,
   setState: func.isRequired,
+  viewCalculationDetails: func.isRequired,
   createCalculation: func.isRequired,
   cancelCalculation: func.isRequired,
   toggleHidden: func.isRequired,

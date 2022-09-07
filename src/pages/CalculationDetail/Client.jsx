@@ -1,19 +1,25 @@
-import { func, string } from 'prop-types'
 import { useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router'
 import { useFlow } from '../../utils/useFlow'
 import { GET } from '../../utils/api'
 import CalculationDetailUI from './UI'
 
-const CalculationDetailClient = ({ id, onClose }) => {
+const CalculationDetailClient = () => {
+  const { calculationId } = useParams()
+  const navigate = useNavigate()
+
   const [state, actions] = useFlow(
     {
-      id,
+      id: calculationId,
       isLoading: true,
       values: [],
       maxValue: 0,
       minValue: 0,
     },
     calculationDetailActions,
+    {
+      navigate,
+    },
   )
 
   useEffect(() => {
@@ -26,14 +32,13 @@ const CalculationDetailClient = ({ id, onClose }) => {
 
   return (
     <CalculationDetailUI
-      onClose={onClose}
       {...state}
       {...actions}
     />
   )
 }
 
-export const calculationDetailActions = ({ getState, setState }) => ({
+export const calculationDetailActions = ({ getState, setState, getContext }) => ({
   getDetails: async () => {
     const { id } = getState()
 
@@ -63,11 +68,11 @@ export const calculationDetailActions = ({ getState, setState }) => ({
       isLoading: false,
     })
   },
-})
+  onClose: () => {
+    const { navigate } = getContext()
 
-CalculationDetailClient.propTypes = {
-  id: string.isRequired,
-  onClose: func.isRequired,
-}
+    navigate('/dashboard')
+  },
+})
 
 export default CalculationDetailClient
