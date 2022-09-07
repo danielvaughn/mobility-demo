@@ -1,0 +1,12 @@
+
+.progress-bar {
+  @apply rounded-sm overflow-hidden;
+}
+
+.progress-bar[value]::-webkit-progress-bar {
+  @apply bg-slate-300;
+}
+
+.progress-bar[value]::-webkit-progress-value {
+  @apply bg-cyan-400;
+}
