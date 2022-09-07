@@ -224,6 +224,7 @@ const DashboardUI = ({
                               cancelCalculation(calc.id)
                             }}
                             title="Cancel"
+                            disabled={calc.status === 'cancelled'}
                           >
                             <AiOutlineClose />
                           </Button>
