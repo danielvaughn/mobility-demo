@@ -44,5 +44,6 @@ module.exports = {
     'react/no-array-index-key': 'off',
     'arrow-body-style': 'off',
     'no-use-before-define': 'off',
+    'consistent-return': 'off',
   },
 }
