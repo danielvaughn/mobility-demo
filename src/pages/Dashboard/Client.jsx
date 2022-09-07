@@ -55,6 +55,8 @@ export const dashboardActions = ({
           ...calc,
           status,
         }
+      }).sort((a, b) => {
+        return new Date(b.started_at) - new Date(a.started_at)
       }),
     })
   },
