@@ -68,7 +68,7 @@ export const POST = async (path, body = {}) => {
   } catch (error) {
     switch (response.status) {
       case 401:
-        break
+        throw new Error('Sorry, your username and/or password does not match our records. Please try again.')
       default:
         throw new Error('Sorry, we encountered an unexpected error. Please try again later.')
     }

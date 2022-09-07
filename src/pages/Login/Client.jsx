@@ -24,6 +24,7 @@ const LoginClient = () => {
 const loginActions = ({ getState, setState, getContext }) => ({
   logIn: async () => {
     const { username, password } = getState()
+    const { setAppState } = getContext()
 
     if (!username && !password) {
       return
@@ -33,15 +34,15 @@ const loginActions = ({ getState, setState, getContext }) => ({
 
     try {
       const loginResponse = await POST('login', { username, password })
-      window.localStorage.setItem('t', loginResponse.token)
+      if (loginResponse.token) {
+        window.localStorage.setItem('t', loginResponse.token)
 
-      const { setAppState } = getContext()
-
-      setAppState({
-        isAuthenticated: true,
-      })
+        setAppState({
+          isAuthenticated: true,
+        })
+      }
     } catch (error) {
-      // TODO
+      setState({ errorMessage: error.message })
     }
   },
 })

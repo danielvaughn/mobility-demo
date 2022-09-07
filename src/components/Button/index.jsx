@@ -9,7 +9,7 @@ const Button = ({
     <button
       {...props}
       type={type}
-      className="p-3 bg-cyan-500 text-white rounded disabled:opacity-50"
+      className="p-3 bg-cyan-500 text-white rounded max-w-xs disabled:opacity-50"
     >
       {children}
     </button>
