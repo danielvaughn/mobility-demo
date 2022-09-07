@@ -1,4 +1,4 @@
-import LoginInterface from "./Interface"
+import LoginInterface from './Interface'
 
 const LoginClient = () => {
   return (

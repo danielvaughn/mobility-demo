@@ -27,7 +27,9 @@ export const useFlow = (state, actions = null, context = {}) => {
 
   if (typeof actions === 'function') {
     flowActions = {
-      ...actions({ get, set, context: getContext, actions: getActions }),
+      ...actions({
+        get, set, context: getContext, actions: getActions,
+      }),
       set,
     }
   } else {

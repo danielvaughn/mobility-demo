@@ -1,7 +1,6 @@
-
 const LoginInterface = () => {
   return (
-    <div></div>
+    <div />
   )
 }
 
