@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { useFlow } from '../../utils/useFlow'
-import { GET, POST } from '../../utils/api'
+import { GET, PATCH, POST } from '../../utils/api'
 import { appContext } from '../../context/AppProvider'
 import DashboardUI from './UI'
 
@@ -46,6 +46,7 @@ export const dashboardActions = ({
       calculations: calculations.map((calc) => {
         return {
           ...calc,
+          is_complete: calc.completed_at !== '',
         }
       }),
     })
@@ -68,6 +69,9 @@ export const dashboardActions = ({
       draftBar: 0,
       draftBaz: 0,
     })
+  },
+  cancelCalculation: async (id) => {
+    await PATCH(`calculations/${id}/cancel`)
   },
   logOut: () => {
     const { setAppState } = getContext()

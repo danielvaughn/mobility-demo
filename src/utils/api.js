@@ -74,3 +74,20 @@ export const POST = async (path, body = {}) => {
 
   return json
 }
+
+export const PATCH = async (path, body = {}) => {
+  const url = getApiUrl(path)
+  const headers = await getHeaders()
+
+  const response = await fetch(url, {
+    method: 'PATCH',
+    headers,
+    body: JSON.stringify(body),
+  })
+
+  if (response.status === 200) {
+    return true
+  }
+
+  throw new Error('Sorry, we encountered an unexpected error. Please try again later.')
+}

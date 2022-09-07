@@ -6,7 +6,7 @@ import Loader from '../../components/Loader'
 import './Dashboard.css'
 
 const DashboardUI = ({
-  draftType, draftFoo, draftBar, draftBaz, isLoading, calculations, createCalculation, logOut, setState,
+  draftType, draftFoo, draftBar, draftBaz, isLoading, calculations, createCalculation, cancelCalculation, logOut, setState,
 }) => {
   return (
     <section className="text-slate-900 h-full flex flex-col">
@@ -120,40 +120,55 @@ const DashboardUI = ({
                 </tr>
               </thead>
               <tbody>
-                {calculations.map((calc) => (
-                  <tr
-                    key={calc.id}
-                  >
-                    <td className="pr-5 pb-2">
-                      <div className="flex items-center whitespace-nowrap text-ellipsis overflow-hidden">
-                        <span
-                          className="block w-4 h-4 rounded-full mr-2 flex-shrink-0"
-                          style={{
-                            backgroundColor: calc.calc_type,
-                          }}
-                        />
-                        {calc.id}
-                      </div>
-                    </td>
-                    <td className="pr-5 pb-2">
-                      {calc.mine && (
-                      <span className="block w-fit px-2 py-1 bg-green-300 border border-green-500 text-green-700 text-xs rounded">owned</span>
-                      )}
+                {calculations.map((calc) => {
+                  return (
+                    <tr
+                      key={calc.id}
+                    >
+                      <td className="pr-5 pb-2">
+                        <div className="flex items-center whitespace-nowrap text-ellipsis overflow-hidden">
+                          <span
+                            className="block w-4 h-4 rounded-full mr-2 flex-shrink-0"
+                            style={{
+                              backgroundColor: calc.calc_type,
+                            }}
+                          />
+                          {calc.id}
+                        </div>
+                      </td>
+                      <td className="pr-5 pb-2">
+                        {calc.mine && (
+                        <span className="block w-fit px-2 py-1 bg-green-300 border border-green-500 text-green-700 text-xs rounded">owned</span>
+                        )}
 
-                      {!calc.mine && (
-                      <span className="block w-fit px-2 py-1 bg-gray-300 border border-gray-500 text-gray-700 text-xs rounded">hidden</span>
-                      )}
-                    </td>
-                    <td className="pb-2">
-                      <progress
-                        value={calc.fraction_complete}
-                        max={1}
-                        className="progress-bar"
-                      />
-                    </td>
-                    <td />
-                  </tr>
-                ))}
+                        {!calc.mine && (
+                        <span className="block w-fit px-2 py-1 bg-gray-300 border border-gray-500 text-gray-700 text-xs rounded">hidden</span>
+                        )}
+                      </td>
+                      <td className="pb-2">
+                        <progress
+                          value={calc.fraction_complete}
+                          max={1}
+                          className="progress-bar"
+                        />
+                      </td>
+                      <td className="pb-2">
+                        {calc.mine && (
+                        <Button
+                          type="button"
+                          size="small"
+                          bgColor="bg-red-500"
+                          onClick={() => {
+                            cancelCalculation(calc.id)
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
@@ -165,9 +180,6 @@ const DashboardUI = ({
 
 DashboardUI.propTypes = {
   isLoading: bool.isRequired,
-  setState: func.isRequired,
-  createCalculation: func.isRequired,
-  logOut: func.isRequired,
   draftType: oneOf(['blue', 'green', 'yellow', 'purple']).isRequired,
   draftFoo: number.isRequired,
   draftBar: number.isRequired,
@@ -180,6 +192,7 @@ DashboardUI.propTypes = {
     started_at: string,
     cancelled_at: string,
     completed_at: string,
+    is_complete: bool,
     error: object,
     foo: number,
     fraction_complete: number,
@@ -188,6 +201,10 @@ DashboardUI.propTypes = {
     value: number,
     values_per_second: number,
   })).isRequired,
+  setState: func.isRequired,
+  createCalculation: func.isRequired,
+  cancelCalculation: func.isRequired,
+  logOut: func.isRequired,
 }
 
 export default DashboardUI
