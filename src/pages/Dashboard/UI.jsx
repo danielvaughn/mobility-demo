@@ -5,6 +5,7 @@ import {
 import { AiOutlineClose, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import Button from '../../components/Button'
 import Loader from '../../components/Loader'
+import CalculationDetail from '../CalculationDetail'
 import './Dashboard.css'
 
 const DashboardUI = ({
@@ -12,6 +13,7 @@ const DashboardUI = ({
   draftFoo,
   draftBar,
   draftBaz,
+  detailId,
   showOnlyMine,
   hiddenMap,
   isLoading,
@@ -23,23 +25,24 @@ const DashboardUI = ({
   setState,
 }) => {
   return (
-    <section className="text-slate-900 h-full flex flex-col">
-      <header className="p-5 bg-white border-b border-slate-300 shadow flex justify-between items-center">
-        <h1 className="text-2xl font-semibold">Your Dashboard</h1>
-        <Button
-          type="button"
-          onClick={logOut}
-        >
-          Log Out
-        </Button>
-      </header>
+    <>
+      <section className="text-slate-900 h-full flex flex-col">
+        <header className="p-5 bg-white border-b border-slate-300 shadow flex justify-between items-center">
+          <h1 className="text-2xl font-semibold">Your Dashboard</h1>
+          <Button
+            type="button"
+            onClick={logOut}
+          >
+            Log Out
+          </Button>
+        </header>
 
-      <div className="h-full overflow-x-hidden flex-grow relative p-5">
-        {isLoading && (
+        <div className="h-full overflow-x-hidden flex-grow relative p-5">
+          {isLoading && (
           <Loader />
-        )}
+          )}
 
-        {!isLoading && (
+          {!isLoading && (
           <div className="max-w-4xl mx-auto px-5">
             <h2 className="text-xl font-semibold mb-4">Start A New Calculation</h2>
             <form
@@ -78,7 +81,7 @@ const DashboardUI = ({
                   max={10}
                   step={1}
                   value={draftFoo}
-                  onChange={(e) => setState({ draftFoo: e.target.value })}
+                  onChange={(e) => setState({ draftFoo: Number(e.target.value) })}
                 />
               </label>
 
@@ -92,7 +95,7 @@ const DashboardUI = ({
                   type="number"
                   value={draftBar}
                   className="w-20"
-                  onChange={(e) => setState({ draftBar: e.target.value })}
+                  onChange={(e) => setState({ draftBar: Number(e.target.value) })}
                 />
               </label>
 
@@ -110,7 +113,7 @@ const DashboardUI = ({
                   max={10}
                   step={1}
                   value={draftBaz}
-                  onChange={(e) => setState({ draftBaz: e.target.value })}
+                  onChange={(e) => setState({ draftBaz: Number(e.target.value) })}
                 />
               </label>
 
@@ -153,7 +156,7 @@ const DashboardUI = ({
                 </Button>
               </div>
             </div>
-            <table className="text-left w-full">
+            <table className="text-left text-sm w-full">
               <thead>
                 <tr>
                   <th className="pb-2">ID</th>
@@ -175,7 +178,15 @@ const DashboardUI = ({
                       key={calc.id}
                     >
                       <td className="pr-5 pb-2">
-                        <div className="flex items-center whitespace-nowrap text-ellipsis overflow-hidden">
+                        <button
+                          type="button"
+                          className="flex items-center whitespace-nowrap text-ellipsis overflow-hidden"
+                          onClick={() => {
+                            setState({
+                              detailId: calc.id,
+                            })
+                          }}
+                        >
                           <span
                             className="block w-4 h-4 rounded-full mr-2 flex-shrink-0"
                             style={{
@@ -183,7 +194,7 @@ const DashboardUI = ({
                             }}
                           />
                           {calc.id}
-                        </div>
+                        </button>
                       </td>
                       <td className="pr-5 pb-2">
                         {calc.mine && (
@@ -194,8 +205,8 @@ const DashboardUI = ({
                         <span className="block w-fit px-2 py-1 bg-gray-300 border border-gray-500 text-gray-700 text-xs rounded">hidden</span>
                         )}
                       </td>
-                      <td className="pb-2">
-                        <div className="flex items-center max-w-[175px]">
+                      <td className="pr-5 pb-2">
+                        <div className="flex items-center max-w-[185px]">
                           <span className="flex-grow capitalize text-sm text-slate-600">{calc.status}</span>
                           <progress
                             value={calc.fraction_complete}
@@ -239,14 +250,26 @@ const DashboardUI = ({
               </tbody>
             </table>
           </div>
-        )}
-      </div>
-    </section>
+          )}
+        </div>
+      </section>
+      {Boolean(detailId) && (
+      <CalculationDetail
+        id={detailId}
+        onClose={() => {
+          setState({
+            detailId: '',
+          })
+        }}
+      />
+      )}
+    </>
   )
 }
 
 DashboardUI.propTypes = {
   isLoading: bool.isRequired,
+  detailId: string.isRequired,
   draftType: oneOf(['blue', 'green', 'yellow', 'purple']).isRequired,
   draftFoo: number.isRequired,
   draftBar: number.isRequired,

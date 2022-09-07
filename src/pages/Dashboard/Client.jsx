@@ -9,6 +9,7 @@ const DashboardClient = () => {
     {
       isLoading: true,
       showOnlyMine: false,
+      detailId: '',
       draftType: 'blue',
       draftFoo: 0,
       draftBar: 0,
@@ -34,12 +35,8 @@ const DashboardClient = () => {
 }
 
 export const dashboardActions = ({
-  getState, setState, getActions, getContext,
+  getState, setState, getContext,
 }) => ({
-  init: async () => {
-    const { getCalculations } = getActions()
-    getCalculations()
-  },
   getCalculations: async () => {
     const calculations = await GET('calculations')
 
@@ -47,7 +44,7 @@ export const dashboardActions = ({
       isLoading: false,
       calculations: calculations.map((calc) => {
         let status = 'started'
-        if (calc.cancalled_at) {
+        if (calc.cancelled_at) {
           status = 'cancelled'
         } else if (calc.completed_at) {
           status = 'completed'
@@ -85,7 +82,6 @@ export const dashboardActions = ({
     await PATCH(`calculations/${id}/cancel`)
   },
   toggleHidden: (id) => {
-    console.log(`th ${id}`)
     const { hiddenMap } = getState()
 
     if (!id) {

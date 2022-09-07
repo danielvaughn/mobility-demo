@@ -1,6 +1,6 @@
 
 .progress-bar {
-  @apply rounded-sm overflow-hidden block w-20;
+  @apply rounded-sm overflow-hidden block w-16;
 }
 
 .progress-bar[value]::-webkit-progress-bar {
