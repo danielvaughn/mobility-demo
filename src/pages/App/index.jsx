@@ -1,38 +1,54 @@
-import { useState } from 'react'
-import reactLogo from '../../assets/react.svg'
+import { useEffect } from 'react'
+import {
+  BrowserRouter as Router, Routes, Route, Navigate,
+} from 'react-router-dom'
+import { useFlow } from '../../utils/useFlow'
+import Dashboard from '../Dashboard'
+import Login from '../Login'
 
+/**
+ *
+ * The sole purpose of the <App /> component is to decide whether to render the authenticated or public routes.
+ * Depending on the size of the app, this might be encapsulated into an <AppRouter /> component or a context provider.
+ *
+ */
 const App = () => {
-  const [count, setCount] = useState(0)
+  const [state, setState] = useFlow({
+    isAuthenticated: false,
+    isLoading: true,
+  })
+
+  useEffect(() => {
+    const token = window.localStorage.getItem('t')
+
+    setState({
+      isAuthenticated: Boolean(token),
+      isLoading: false,
+    })
+  }, [])
 
   return (
-    <div className="App h-full">
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button type="button" onClick={() => setCount((newCount) => newCount + 1)}>
-          count is
-          {' '}
-          {count}
-        </button>
-        <p>
-          Edit
-          {' '}
-          <code>src/App.jsx</code>
-          {' '}
-          and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <Router>
+      {state.isAuthenticated && (
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="*"
+            element={<Navigate to="/dashboard" replace />}
+          />
+        </Routes>
+      )}
+
+      {!state.isAuthenticated && (
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="*"
+            element={<Navigate to="/login" replace />}
+          />
+        </Routes>
+      )}
+    </Router>
   )
 }
 
