@@ -4,8 +4,8 @@ import produce from 'immer'
 export const useFlow = (state, actions = null, context = {}) => {
   const [flowState, setFlowState] = useState(state)
 
-  const get = () => flowState
-  const set = (statePartial) => {
+  const getState = () => flowState
+  const setState = (statePartial) => {
     const modifier = (draft) => {
       Object.keys(statePartial).forEach((key) => {
         draft[key] = statePartial[key]
@@ -28,12 +28,12 @@ export const useFlow = (state, actions = null, context = {}) => {
   if (typeof actions === 'function') {
     flowActions = {
       ...actions({
-        get, set, context: getContext, actions: getActions,
+        getState, setState, getContext, getActions,
       }),
-      set,
+      setState,
     }
   } else {
-    flowActions = set
+    flowActions = setState
   }
 
   useEffect(() => {

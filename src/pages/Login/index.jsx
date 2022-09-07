@@ -1,9 +1,3 @@
-const Login = () => {
-  return (
-    <div>
-      i am login
-    </div>
-  )
-}
+import LoginClient from './Client'
 
-export default Login
+export default LoginClient

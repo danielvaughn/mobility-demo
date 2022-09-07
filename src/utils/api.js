@@ -1,10 +1,14 @@
-
-const getApiUrl = () => {
+const getApiUrl = (path) => {
   const protocol = import.meta.env.VITE_API_PROTOCOL
   const domain = import.meta.env.VITE_API_DOMAIN
-  const port = import.meta.env.VITE_API_PROTOCOL ? `:${import.meta.env.VITE_API_PROTOCOL}` : ''
+  const port = import.meta.env.VITE_API_PORT ? `:${import.meta.env.VITE_API_PORT}` : ''
+  const urlPath = path.startsWith('/') ? path.substring(1) : path
 
-  return `${protocol}://${domain}${port}`
+  const url = `${protocol}://${domain}${port}/${urlPath}`
+
+  console.log(url)
+
+  return new URL(url)
 }
 
 const getHeaders = () => {
@@ -20,7 +24,7 @@ const getHeaders = () => {
 }
 
 export const GET = async (path, query = {}) => {
-  const url = new URL(`${getApiUrl()}/${path}`)
+  const url = getApiUrl(path)
   const headers = getHeaders()
 
   Object.entries(query).forEach((param) => {
@@ -43,6 +47,31 @@ export const GET = async (path, query = {}) => {
     const error = new Error(json.message)
     error.status = response.status
     throw error
+  }
+
+  return json
+}
+
+export const POST = async (path, body = {}) => {
+  const url = getApiUrl(path)
+  const headers = await getHeaders()
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  })
+
+  let json = {}
+  try {
+    json = await response.json()
+  } catch (error) {
+    switch (response.status) {
+      case 401:
+        break
+      default:
+        throw new Error('Sorry, we encountered an unexpected error. Please try again later.')
+    }
   }
 
   return json
