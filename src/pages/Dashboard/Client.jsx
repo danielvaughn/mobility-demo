@@ -61,6 +61,13 @@ export const dashboardActions = ({
       bar: draftBar,
       baz: draftBaz,
     })
+
+    setState({
+      draftType: 'blue',
+      draftFoo: 0,
+      draftBar: 0,
+      draftBaz: 0,
+    })
   },
   logOut: () => {
     const { setAppState } = getContext()
